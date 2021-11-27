@@ -1,34 +1,22 @@
----
-output: github_document
-editor_options: 
-  chunk_output_type: console
----
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "100%"
-)
-```
 
 # llbox
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of llbox is to ... have control over building graticules. 
+The goal of llbox is to … have control over building graticules.
 
-There are simple cases ... we can do curvature analysis (see tissot) for more complex ones, or segment subdivision ala D3. 
+There are simple cases … we can do curvature analysis (see tissot) for
+more complex ones, or segment subdivision ala D3.
 
 WIP
 
-```{r longlat}
+``` r
 library(llbox)
 devtools::load_all()
+#> ℹ Loading llbox
 to_sf <- function(x) {
   sf::st_sfc(sf::st_polygon(list(polygonate(x))), crs = "OGC:CRS84")
 }
@@ -56,6 +44,6 @@ for (i in seq_along(head(gridx, -1))) {
 
 
 plot(sf::st_transform(do.call(c, lapply(x0, to_sf)), proj))
-
-
 ```
+
+<img src="man/figures/README-longlat-1.png" width="100%" />
