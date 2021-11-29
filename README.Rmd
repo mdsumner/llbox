@@ -24,12 +24,14 @@ The goal of llbox is to ... have control over building graticules.
 
 There are simple cases ... we can do curvature analysis (see tissot) for more complex ones, or segment subdivision ala D3. 
 
-WIP
+This is how to make tiles. Do the start and end edge of a series of longitudes and latitudes. 
 
-```{r longlat}
+```{r tiles}
 library(llbox)
 devtools::load_all()
+#system.time({
 to_sf <- function(x) {
+  #sfheaders::sfc_polygon(polygonate(x))
   sf::st_sfc(sf::st_polygon(list(polygonate(x))), crs = "OGC:CRS84")
 }
 proj <- "+proj=murd3 +lat_1=30 +lat_2=50"
@@ -54,8 +56,29 @@ for (i in seq_along(head(gridx, -1))) {
   }
 }
 
-
-plot(sf::st_transform(do.call(c, lapply(x0, to_sf)), proj))
+sfx <- sf::st_transform(do.call(c, lapply(x0, to_sf)), proj)
+#})
+plot(sfx)
 
 
 ```
+
+This is how to make lines. 
+
+
+```{r lines}
+xs <- seq(-175, 175, by = 15)
+ys <- seq(-75, 75, by = 10)
+meridians <- lapply(xs, \(x) west(x, c(-85, 85)))
+parallels <- lapply(ys, \(x) north(c(-180, 180), x, nverts = 120))
+to_sfl <- function(x) {
+  sf::st_sfc(sf::st_linestring(x), crs = "OGC:CRS84")
+}
+sfx <- sf::st_transform(do.call(c, lapply(c(meridians, parallels), to_sfl)), proj)
+plot(sfx)
+```
+
+
+## Code of Conduct
+  
+Please note that the llbox project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
